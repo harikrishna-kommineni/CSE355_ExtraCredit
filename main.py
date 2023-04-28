@@ -32,3 +32,5 @@ def login():
 
     # TODO: Return a response based on whether the request is malicious or not
     return 'Login successful!'
+
+# Test commit message
