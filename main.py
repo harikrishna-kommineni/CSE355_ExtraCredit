@@ -1,36 +1,29 @@
-from flask import Flask, request
+import pygame
 import numpy as np
 
+state_init = (100, 100) # state_init allows us to see which cells are virus, antivirus, computer/background
+cell_size = 5 # whatever game of life cells that are created, they will have 5 pixels to properly be seen
 
-# Define the cellular automaton rule
-def cellular_automaton_rule(left, center, right):
-    # TODO: Define your cellular automaton rule here
-    return center
+red_color = (255, 0, 0) # virus
+black_color = (0, 0, 0) # background / computer
+green_color = (0, 255, 0) # anti-virus
 
+purple_color = (128, 0, 128) # computer part
+yellow_color = (255, 255, 0) # computer part
 
-# Create a Flask application
-app = Flask(__name__)
+pygame.init() # intialize pygame so that the simulation can start properly
 
+# Window related settings
+width = state_init[0] * cell_size # making the width to fit the 5 pixel cells and which state their in
+height = state_init[1] * cell_size # making the height to fit the 5 pixel cells and which state their in
+clock = pygame.time.Clock() # this clock allows us to control the frames per second for the simulation
+window = pygame.display.set_mode((width, height)) # creates the window
+pygame.display.set_caption("Virus/Malware Simulator") # caption for the window
 
-# Define the routes for the application
-@app.route('/')
-def index():
-    return 'Hello, World!'
+# since we are done with the setting up, now it's generating the cells and intializing it to 0
+state = np.zeros(state_init)
+for i in range(state_init[0]):
+    for j in range(state_init[1]):
+        if (np.random.random() < 0.2):
+            state[i][j] = 1
 
-
-@app.route('/login', methods=['POST'])
-def login():
-    # Analyze the incoming request and filter out any malicious requests
-    request_data = request.get_data()
-    request_array = np.array([ord(c) for c in request_data])
-    filtered_array = np.zeros(len(request_data))
-    for i in range(1, len(request_data) - 1):
-        filtered_array[i] = cellular_automaton_rule(request_array[i - 1], request_array[i], request_array[i + 1])
-
-    # Visualize the state transitions of the automaton
-    # TODO: Implement code to visualize the state transitions of the automaton
-
-    # TODO: Return a response based on whether the request is malicious or not
-    return 'Login successful!'
-
-# Test commit message
